@@ -58,7 +58,7 @@ def search_videos(query, max_results=5, exclude_urls=None):
 def download_video(video_url, format_type):
     # yt-dlpを使って動画または音声をダウンロード
     if format_type == 'video':
-        subprocess.run(['yt-dlp', '-f', 'mp4', video_url])
+        subprocess.run(['yt-dlp', '-f', 'bestvideo+bestaudio/best', video_url])
     elif format_type == 'audio':
         subprocess.run(['yt-dlp', '-x', '--audio-format', 'mp3', video_url])
 
