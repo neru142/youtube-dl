@@ -3,8 +3,14 @@ import subprocess
 import re
 from datetime import timedelta
 
+try:
+    token = open('token.txt').read().strip()
+except:
+    print("Token Error")
+    pass
+
 # YouTube APIの設定
-API_KEY = 'YourToken'  # 取得したAPIキー
+API_KEY = token  # 取得したAPIキー
 YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 

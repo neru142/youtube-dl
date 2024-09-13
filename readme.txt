@@ -1,11 +1,12 @@
 This is something I created in a few hours for a school assignment. You need a token for YouTube Data API v3.
+Please enter it in the text file.
 https://console.cloud.google.com/
 
 If you are using the audio in download format, you will need ffmpeg to convert it to mp3.
 Please set it up yourself. (It might work without it, though.)
 https://ffmpeg.org/download.html
 
-When searching by keywords, only videos under 5 minutes will be displayed. (This was done to avoid delays during class presentations.)
+When searching by keywords, only videos under 5 minutes will be displayed. (This was to avoid taking too much time during class presentations.)
 You can change this if needed, so please adjust it yourself.
 
 Other than that, please manage it with ChatGPT.
@@ -14,6 +15,7 @@ That's all.
 
 学校の課題で数時間で作成したものです。
 YouTube-DataApi-v3のtokenが必要です。
+txt内に入力して下さい
 https://console.cloud.google.com/
 
 ダウンロード形式でaudioを使用する場合はmp3に変換するためにffmpegが必要です。
