@@ -5,9 +5,9 @@ from datetime import timedelta
 
 try:
     token = open('token.txt').read().strip()
-except:
-    print("Token Error")
-    pass
+except FileNotFoundError:
+    print("token.txtファイルが見つかりません。APIキーが必要です。")
+    exit()
 
 # YouTube APIの設定
 API_KEY = token  # 取得したAPIキー
@@ -102,7 +102,11 @@ if __name__ == '__main__':
                 print('無効な形式の選択です。')
 
         elif choice == 'keyword':
-            query = input('\n検索キーワードを入力してください: ')
+            query = input('\n検索キーワードを入力してください: ').strip()
+
+            if not query:
+                print("検索キーワードを入力してください。")
+                continue
 
             while True:
                 videos = search_videos(query, max_results=10, exclude_urls=previous_urls)
@@ -126,23 +130,23 @@ if __name__ == '__main__':
                         print('スクリプトを終了します。')
                         exit()  # スクリプトを終了する
 
+                    if not choice.isdigit() or not (0 < int(choice) <= len(videos)):
+                        print('無効な番号が入力されました。キーワードを変更してください。')
+                        break
+
                     try:
                         choice = int(choice) - 1
-                        if 0 <= choice < len(videos):
-                            selected_video_url = videos[choice][1]
-                            format_type = input('\nダウンロード形式を選んでください（video/audio）: ').strip().lower()
-                            if format_type in ['video', 'audio']:
-                                print(f'\n{videos[choice][0]} を{format_type}としてダウンロード中...')
-                                download_video(selected_video_url, format_type)
-                                previous_urls.add(selected_video_url)  # ダウンロードした動画のURLを記録
-                            else:
-                                print('無効な形式の選択です。')
+                        selected_video_url = videos[choice][1]
+                        format_type = input('\nダウンロード形式を選んでください（video/audio）: ').strip().lower()
+                        if format_type in ['video', 'audio']:
+                            print(f'\n{videos[choice][0]} を{format_type}としてダウンロード中...')
+                            download_video(selected_video_url, format_type)
+                            previous_urls.add(selected_video_url)  # ダウンロードした動画のURLを記録
                         else:
-                            print('無効な選択です。キーワードを変更してください。')
-                            break  # 無効な選択の場合、検索ワードを変更するためにループを抜ける
+                            print('無効な形式の選択です。')
                     except ValueError:
                         print('無効な番号が入力されました。キーワードを変更してください。')
-                        break  # 無効な番号の場合、検索ワードを変更するためにループを抜ける
+                        break
 
             # 再取得の選択肢を提供
             retry = input('\n初めに戻りますか？ (y/n): ').strip().lower()
