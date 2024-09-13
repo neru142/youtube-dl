@@ -35,14 +35,14 @@ def parse_duration(duration):
         return total_seconds / 60  # 分単位で返す
     return 0
 
-def search_videos(query, max_results=5, exclude_urls=None):
+def search_videos(query, max_results=10, max_duration_minutes=None, exclude_urls=None):
     youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=API_KEY)
     
     # YouTubeでの検索
     search_response = youtube.search().list(
         q=query,
         part='id,snippet',
-        maxResults=max_results,
+        maxResults=min(max_results, 20),  # 最大20件まで取得
         type='video'
     ).execute()
 
@@ -67,8 +67,8 @@ def search_videos(query, max_results=5, exclude_urls=None):
         duration = video_details['items'][0]['contentDetails']['duration']
         duration_minutes = parse_duration(duration)
 
-        # 5分未満の動画をフィルタリング
-        if duration_minutes < 5:
+        # 指定された長さ未満の動画をフィルタリング
+        if max_duration_minutes is None or duration_minutes <= max_duration_minutes:
             videos.append((video_title, video_url))
 
     return videos
@@ -84,7 +84,7 @@ def print_instructions():
     # スクリプトの説明と使い方を表示
     print("YouTube動画ダウンローダー")
     print("このスクリプトは、YouTubeから動画を検索またはURLを指定してダウンロードできます。")
-    print("キーワードで検索した場合は5分未満の動画のみがリストアップされます。")
+    print("検索キーワードで検索した場合は指定された時間以下の動画のみがリストアップされます。")
     print("\n使い方:")
     print("1. スクリプトを実行します。")
     print("2. 検索キーワードを入力するか、URLを指定してダウンロードします。")
@@ -116,13 +116,20 @@ if __name__ == '__main__':
 
         elif choice == 'keyword':
             query = input('\n検索キーワードを入力してください: ').strip()
+            max_duration = input('表示する動画の最大長さを分単位で入力してください（例: 5）。\n入力しない場合はデフォルトで5分になります: ').strip()
 
             if not query:
                 print("検索キーワードを入力してください。")
                 continue
 
+            try:
+                max_duration_minutes = int(max_duration) if max_duration else None
+            except ValueError:
+                print("無効な分数が入力されました。数値で入力してください。")
+                continue
+
             while True:
-                videos = search_videos(query, max_results=10, exclude_urls=previous_urls)
+                videos = search_videos(query, max_results=20, max_duration_minutes=max_duration_minutes, exclude_urls=previous_urls)
 
                 # 検索結果を表示
                 if not videos:
