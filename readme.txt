@@ -2,8 +2,8 @@
 
 学校の課題で数時間で作成したものです。
 
-exeファイルで実行する場合はライブラリ同封したのでPython環境無くても普通に動くと思います。
-
+Python環境無くても動かす為のexeも追加
+　
 
 YouTube-DataApi-v3のtokenが必要です。
 txt内に入力して下さい
@@ -24,7 +24,7 @@ English {
 
 This is something I created for a school project in just a few hours.
 
-If you run the exe file, it should work without needing a Python environment as I’ve included the necessary libraries.
+I’ve also included an exe file to run it without needing a Python environment.
 
 You will need a YouTube Data API v3 token. Please input it in the txt file. https://console.cloud.google.com/
 
