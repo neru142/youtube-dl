@@ -73,12 +73,28 @@ def search_videos(query, max_results=10, max_duration_minutes=None, exclude_urls
 
     return videos
 
+# def download_video(video_url, format_type):
+#     # yt-dlpを使って動画または音声をダウンロード
+#     if format_type == 'video':
+#         subprocess.run(['yt-dlp', '-f', 'bestvideo+bestaudio/best', video_url])
+#     elif format_type == 'audio':
+#         subprocess.run(['yt-dlp', '-x', '--audio-format', 'mp3', video_url])
+
 def download_video(video_url, format_type):
-    # yt-dlpを使って動画または音声をダウンロード
-    if format_type == 'video':
-        subprocess.run(['yt-dlp', '-f', 'bestvideo+bestaudio/best', video_url])
-    elif format_type == 'audio':
-        subprocess.run(['yt-dlp', '-x', '--audio-format', 'mp3', video_url])
+    try:
+        # 動画のダウンロード: MP4に変換
+        if format_type == 'video':
+            subprocess.run(['yt-dlp', '-f', 'bestvideo+bestaudio/best', '--merge-output-format', 'mp4', video_url], check=True)
+        # 音声のダウンロード: MP3に変換
+        elif format_type == 'audio':
+            subprocess.run(['yt-dlp', '-x', '--audio-format', 'mp3', video_url], check=True)
+    except subprocess.CalledProcessError:
+        # エラーが発生した場合、通常のダウンロード方法にフォールバック
+        if format_type == 'video':
+            subprocess.run(['yt-dlp', '-f', 'bestvideo+bestaudio/best', video_url])
+        # 音声のダウンロード: 変換なし
+        elif format_type == 'audio':
+            subprocess.run(['yt-dlp', '-x', video_url])
 
 def print_instructions():
     # スクリプトの説明と使い方を表示
